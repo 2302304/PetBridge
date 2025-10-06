@@ -1,0 +1,53 @@
+version: "3.9"
+
+services:
+  server-a:
+    build: ./server-a
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+      - server-b
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/petbridge
+      - ADOPTION_SERVICE_URL=http://server-b:3002
+    networks:
+      - petbridge-net
+
+  server-b:
+    build: ./server-b
+    ports:
+      - "3002:3002"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/petbridge
+    networks:
+      - petbridge-net
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - server-a
+    networks:
+      - petbridge-net
+
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: petbridge
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - petbridge-net
+
+networks:
+  petbridge-net:
+    driver: bridge
