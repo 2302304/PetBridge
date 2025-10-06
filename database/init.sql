@@ -9,6 +9,15 @@ CREATE TABLE animals (
   status VARCHAR(20) DEFAULT 'available'
 );
 
+CREATE TABLE IF NOT EXISTS adoptions (
+  id SERIAL PRIMARY KEY,
+  animal_id INTEGER REFERENCES animals(id),
+  adopter_name VARCHAR(100),
+  adopter_email VARCHAR(100),
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+
 INSERT INTO animals (name, type, age, breed, description, image_url)
 VALUES
 ('Milo', 'koira', 3, 'Labradorinnoutaja', 'Ystävällinen ja energinen', 'https://place-puppy.com/200x200'),
