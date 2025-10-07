@@ -10,8 +10,8 @@ services:
       - db
       - server-b
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/petbridge
-      - ADOPTION_SERVICE_URL=http://server-b:3002
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/petbridge
+      ADOPTION_SERVICE_URL: http://server-b:3002
     networks:
       - petbridge-net
 
@@ -23,7 +23,7 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/petbridge
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/petbridge
     networks:
       - petbridge-net
 
